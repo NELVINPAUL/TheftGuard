@@ -238,14 +238,6 @@ tr:hover td{background:var(--tg-surface2)}
         <h1>TheftGuardPOS</h1>
         <p>Supermarket Intelligence &amp; Security System</p>
       </div>
-      <div style="font-size:11px;color:var(--tg-text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Quick demo role</div>
-      <div class="role-row">
-        <div class="rpill active" onclick="selectRole(this,'admin')"><i class="ti ti-crown" style="font-size:11px"></i> Owner</div>
-        <div class="rpill" onclick="selectRole(this,'manager')"><i class="ti ti-briefcase" style="font-size:11px"></i> Manager</div>
-        <div class="rpill" onclick="selectRole(this,'cashier')"><i class="ti ti-credit-card" style="font-size:11px"></i> Cashier</div>
-        <div class="rpill" onclick="selectRole(this,'storekeeper')"><i class="ti ti-package" style="font-size:11px"></i> Storekeeper</div>
-        <div class="rpill" onclick="selectRole(this,'accountant')"><i class="ti ti-chart-bar" style="font-size:11px"></i> Accountant</div>
-      </div>
       <div class="field">
         <label><i class="ti ti-user" style="font-size:12px;vertical-align:-1px"></i> Username</label>
         <input id="lg-user" type="text" placeholder="Enter your username" autocomplete="username" oninput="clearErr()"/>
@@ -344,20 +336,11 @@ tr:hover td{background:var(--tg-surface2)}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.1rem">
           <div class="card">
             <div class="card-title"><div class="ctl"><i class="ti ti-bell-ringing" style="color:var(--tg-danger-t)"></i> Active Alerts</div></div>
-            <div class="alert-list">
-              <div class="alert-item danger"><i class="ti ti-alert-triangle"></i><span>5 cartons of milk missing — expected 40, found 35.</span></div>
-              <div class="alert-item warn"><i class="ti ti-package"></i><span>Cooking Oil 2L — only 3 units remaining.</span></div>
-              <div class="alert-item warn"><i class="ti ti-calendar-x"></i><span>12 yogurt products expire in 5 days.</span></div>
-              <div class="alert-item info"><i class="ti ti-eye"></i><span>Cashier John: 8 refunds today (avg: 2). Investigate.</span></div>
-            </div>
+            <div class="alert-list" id="dash-alerts-list"></div>
           </div>
           <div class="card">
             <div class="card-title"><div class="ctl"><i class="ti ti-trophy"></i> Top Products Today</div></div>
-            <div class="bar-row"><span class="bar-label">Unga Maize 2kg</span><div class="bar-track"><div class="bar-fill" style="width:88%"></div></div><span class="bar-val">KSh 22,400</span></div>
-            <div class="bar-row"><span class="bar-label">Milk 500ml</span><div class="bar-track"><div class="bar-fill" style="width:74%"></div></div><span class="bar-val">KSh 18,600</span></div>
-            <div class="bar-row"><span class="bar-label">Cooking Oil 2L</span><div class="bar-track"><div class="bar-fill" style="width:65%"></div></div><span class="bar-val">KSh 16,250</span></div>
-            <div class="bar-row"><span class="bar-label">Sugar 1kg</span><div class="bar-track"><div class="bar-fill" style="width:58%"></div></div><span class="bar-val">KSh 14,500</span></div>
-            <div class="bar-row"><span class="bar-label">Bread 400g</span><div class="bar-track"><div class="bar-fill" style="width:44%"></div></div><span class="bar-val">KSh 11,000</span></div>
+            <div id="dash-top-products" style="color:var(--tg-text2);font-size:12px">No sales recorded yet.</div>
           </div>
         </div>
         <div class="card">
@@ -428,10 +411,8 @@ tr:hover td{background:var(--tg-surface2)}
         </div>
         <div class="card">
           <div class="card-title"><div class="ctl"><i class="ti ti-shield-exclamation" style="color:var(--tg-danger-t)"></i> Smart Loss Detection</div></div>
-          <div class="alert-list">
-            <div class="alert-item danger"><i class="ti ti-search"></i><span>Milk 500ml — Expected 40, sold 12, delivered 7. Found 35. Missing: 0. Possible theft.</span></div>
-            <div class="alert-item danger"><i class="ti ti-receipt-off"></i><span>Fake return: John Kamau — 6 items KSh 4,560 returned. Items not found in re-shelved stock.</span></div>
-            <div class="alert-item warn"><i class="ti ti-trending-down"></i><span>Sugar 1kg — 22 units reduced with no sales between 12:00–13:00.</span></div>
+          <div class="alert-list" id="loss-detection-list">
+            <div class="alert-item info"><i class="ti ti-info-circle"></i><span>No loss-detection events recorded yet.</span></div>
           </div>
         </div>
       </div>
@@ -473,14 +454,9 @@ tr:hover td{background:var(--tg-surface2)}
             <div class="geo-map">
               <div class="geo-zone" style="width:155px;height:135px;top:27px;left:50%;transform:translateX(-50%);border-color:var(--tg-accent);color:var(--tg-accent);opacity:.4">PREMISES</div>
               <div class="geo-zone" style="width:85px;height:65px;top:52px;left:50%;transform:translateX(-50%);border-color:var(--tg-success-t);color:var(--tg-success-t);opacity:.5">CASHIER</div>
-              <div class="geo-dot gpulse" style="background:#10b981;top:88px;left:44%"></div>
-              <div class="geo-dot gpulse" style="background:#10b981;top:98px;left:54%;animation-delay:.4s"></div>
-              <div class="geo-dot" style="background:#f59e0b;top:128px;left:36%"></div>
-              <div class="geo-dot gpulse" style="background:#10b981;top:78px;left:50%;animation-delay:.8s"></div>
-              <div class="geo-dot" style="background:#ef4444;top:172px;left:79%"></div>
             </div>
             <div style="font-size:11px;color:var(--tg-text2)"><span style="color:#10b981">●</span> In zone &nbsp;<span style="color:#f59e0b">●</span> Back area &nbsp;<span style="color:#ef4444">●</span> Out of zone</div>
-            <div style="font-size:11px;color:var(--tg-danger-t);margin-top:4px"><i class="ti ti-alert-triangle" style="font-size:11px;vertical-align:-1px"></i> Grace Achieng outside store — manager alerted</div>
+            <div style="font-size:11px;color:var(--tg-text2);margin-top:4px">No geofence alerts.</div>
           </div>
           <div class="card">
             <div class="card-title"><div class="ctl"><i class="ti ti-user-check"></i> User Accounts &amp; Staff</div></div>
@@ -500,7 +476,7 @@ tr:hover td{background:var(--tg-surface2)}
           <div class="form-row">
             <div class="field"><label>Type</label><select><option>Full Daily Summary</option><option>Sales Report</option><option>Stock Movement</option><option>Missing Stock</option><option>Expiry Report</option></select></div>
             <div class="field"><label>Format</label><select><option>PDF</option><option>Excel</option><option>CSV</option></select></div>
-            <div class="field"><label>Date</label><input type="date" value="2026-07-18"/></div>
+            <div class="field"><label>Date</label><input type="date" id="rpt-date"/></div>
             <button class="btn-sm primary" onclick="exportRpt()">Export</button>
           </div>
           <div id="rpt-msg" style="display:none;padding:8px 12px;background:var(--tg-success-bg);border-radius:8px;font-size:12px;color:var(--tg-success-t)"><i class="ti ti-check" style="font-size:12px;vertical-align:-1px"></i> Report generated and sent to owner email + WhatsApp</div>
@@ -516,10 +492,6 @@ tr:hover td{background:var(--tg-surface2)}
           <table>
             <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Details</th></tr></thead>
             <tbody id="audit-body">
-            <tr><td>14:05</td><td>john.cashier</td><td><span class="tag tag-danger">Refund</span></td><td>KSh 4,560 — 6 items not re-shelved</td></tr>
-            <tr><td>13:12</td><td>john.cashier</td><td><span class="tag tag-warn">Stock edit</span></td><td>Sugar 1kg: 110 → 88</td></tr>
-            <tr><td>10:30</td><td>mary.store</td><td><span class="tag tag-info">Delivery</span></td><td>200 units Unga Maize from Kitui Millers</td></tr>
-            <tr><td>08:45</td><td>admin</td><td><span class="tag tag-gray">Login</span></td><td>Admin login — Nairobi HQ</td></tr>
             </tbody>
           </table>
         </div>
@@ -678,11 +650,7 @@ tr:hover td{background:var(--tg-surface2)}
 <script>
 /* ================= ROLE CONFIG ================= */
 const ROLES={
-  admin:{label:'Owner/Admin',user:'admin@theftguard.ke',pass:'Admin@2026',nav:['dashboard','sales','stock','carpets','employees','reports','suppliers'],tfa:true,perms:{editPrice:true,editStock:true,deleteProduct:true,manageSupplier:true,manageStaff:true,sell:true,print:true,manageCarpets:true}},
-  manager:{label:'Manager',user:'peter.manager',pass:'Manager@2026',nav:['dashboard','sales','stock','employees','reports','suppliers'],tfa:false,perms:{editPrice:true,editStock:true,deleteProduct:true,manageSupplier:true,manageStaff:true,sell:true,print:true,manageCarpets:false}},
-  cashier:{label:'Cashier',user:'jane.cashier',pass:'Cashier@2026',nav:['dashboard','sales'],tfa:false,perms:{editPrice:false,editStock:false,deleteProduct:false,manageSupplier:false,manageStaff:false,sell:true,print:true,manageCarpets:false}},
-  storekeeper:{label:'Storekeeper',user:'mary.store',pass:'Store@2026',nav:['dashboard','stock','suppliers'],tfa:false,perms:{editPrice:false,editStock:true,deleteProduct:false,manageSupplier:true,manageStaff:false,sell:false,print:false,manageCarpets:false}},
-  accountant:{label:'Accountant',user:'acct.finance',pass:'Acct@2026',nav:['dashboard','reports'],tfa:false,perms:{editPrice:false,editStock:false,deleteProduct:false,manageSupplier:false,manageStaff:false,sell:false,print:true,manageCarpets:false}}
+  admin:{label:'Owner/Admin',user:'admin',pass:'admin10',nav:['dashboard','sales','stock','carpets','employees','reports','suppliers'],tfa:false,perms:{editPrice:true,editStock:true,deleteProduct:true,manageSupplier:true,manageStaff:true,sell:true,print:true,manageCarpets:true}}
 };
 const NAV={dashboard:{label:'Dashboard',icon:'ti-layout-dashboard'},sales:{label:'Point of Sale',icon:'ti-credit-card'},stock:{label:'Stock Control',icon:'ti-package'},carpets:{label:'Carpet Inventory',icon:'ti-carpet'},employees:{label:'Employees',icon:'ti-users'},reports:{label:'Reports & Audit',icon:'ti-file-analytics'},suppliers:{label:'Suppliers',icon:'ti-truck'}};
 const ROLE_KEY_BY_LABEL={Cashier:'cashier',Manager:'manager',Storekeeper:'storekeeper',Accountant:'accountant'};
@@ -695,7 +663,9 @@ function getAccount(username){
   const s=staff.find(x=>x.username&&x.username.toLowerCase()===username.toLowerCase());
   if(s){
     const roleKey=ROLE_KEY_BY_LABEL[s.role]||'cashier';
-    const base=ROLES[roleKey];
+    const base={nav:['dashboard','sales'],perms:{editPrice:false,editStock:false,deleteProduct:false,manageSupplier:false,manageStaff:false,sell:true,print:true,manageCarpets:false}};
+    if(roleKey==='manager'||roleKey==='storekeeper')base.nav=['dashboard','sales','stock','employees','reports','suppliers'];
+    if(roleKey==='accountant')base.nav=['dashboard','reports'];
     return {label:s.role,user:s.username,pass:s.password,nav:base.nav,tfa:false,perms:base.perms,displayName:s.name,staffId:s.id};
   }
   return null;
@@ -707,35 +677,13 @@ let printerOn=false;
 let scanStream=null,scanRAF=null,barcodeDetector=null;
  
 /* ================= DATA STATE ================= */
-let suppliers=[
-  {id:'sup1',name:'Kitui Millers Ltd',contact:'0722 111 222',products:'Flour, Maize',lastDelivery:'May 10',pendingPO:45000,status:'Active'},
-  {id:'sup2',name:'Brookside Dairies',contact:'0733 222 333',products:'Milk, Yogurt',lastDelivery:'May 11',pendingPO:22500,status:'Overdue'},
-  {id:'sup3',name:'Pwani Oil Group',contact:'0700 400 500',products:'Cooking Oil',lastDelivery:'May 8',pendingPO:78000,status:'Urgent'},
-  {id:'sup4',name:'Nairobi Bakeries',contact:'0755 600 700',products:'Bread, Pastries',lastDelivery:'May 12',pendingPO:0,status:'Active'}
-];
+let suppliers=[];
  
-let products=[
-  {barcode:'6001007088',name:'Unga Maize 2kg',category:'Grocery',price:160,stock:142,min:50,expiry:'2025-09-01',supplierId:'sup1'},
-  {barcode:'6002002430',name:'Milk 500ml',category:'Dairy',price:65,stock:35,min:40,expiry:'2026-07-23',supplierId:'sup2'},
-  {barcode:'6003301122',name:'Cooking Oil 2L',category:'Grocery',price:450,stock:3,min:20,expiry:'2026-08-10',supplierId:'sup3'},
-  {barcode:'6004101033',name:'Sugar 1kg',category:'Grocery',price:145,stock:88,min:30,expiry:'2026-12-01',supplierId:'sup1'},
-  {barcode:'6005201987',name:'Yogurt 500ml',category:'Dairy',price:90,stock:24,min:15,expiry:'2026-07-23',supplierId:'sup2'},
-  {barcode:'6006400221',name:'Bread 400g',category:'Bakery',price:60,stock:18,min:20,expiry:'2026-07-21',supplierId:'sup4'}
-];
+let products=[];
  
-let carpets=[
-  {code:'CPT-1001',name:'Persian Medallion',size:'5x8 ft',color:'Maroon',price:8500,stock:6,min:2,supplierId:'sup1'},
-  {code:'CPT-1002',name:'Shaggy Plain',size:'6x9 ft',color:'Grey',price:6200,stock:1,min:2,supplierId:'sup4'},
-  {code:'CPT-1003',name:'Kilim Woven',size:'4x6 ft',color:'Multicolor',price:4500,stock:9,min:3,supplierId:'sup1'}
-];
+let carpets=[];
  
-let staff=[
-  {id:'st1',name:'Jane Wanjiku',role:'Cashier',onShift:true,clockIn:'08:02 AM',location:'In zone',sales:31200,status:'Active'},
-  {id:'st2',name:'John Kamau',role:'Cashier',onShift:true,clockIn:'08:15 AM',location:'Back zone',sales:28450,status:'Idle 12m'},
-  {id:'st3',name:'Mary Njeri',role:'Storekeeper',onShift:true,clockIn:'07:55 AM',location:'In zone',sales:0,status:'Active'},
-  {id:'st4',name:'Peter Otieno',role:'Manager',onShift:true,clockIn:'07:45 AM',location:'In zone',sales:0,status:'Supervising'},
-  {id:'st5',name:'Grace Achieng',role:'Cashier',onShift:true,clockIn:'08:30 AM',location:'Out of zone',sales:22100,status:'Alert sent'}
-];
+let staff=[];
  
 let cart=[]; // {barcode,name,price,qty}
 let lastSaleSnapshot=null;
@@ -983,7 +931,7 @@ function renderAll(){
 function fmt(n){return 'KSh '+Number(n).toLocaleString('en-KE',{minimumFractionDigits:0,maximumFractionDigits:2})}
  
 function stockStatus(p){
-  const today=new Date('2026-07-18');
+  const today=new Date();
   const exp=p.expiry?new Date(p.expiry):null;
   const daysToExpiry=exp?Math.ceil((exp-today)/86400000):999;
   if(p.stock<=0)return{label:'Out of Stock',cls:'tag-danger'};
@@ -1002,18 +950,22 @@ function carpetStatus(c){
  
 function renderDashboard(){
   const lowStock=products.filter(p=>p.stock<p.min).length;
-  const nearExpiry=products.filter(p=>{const d=Math.ceil((new Date('2026-07-18')-new Date(p.expiry))/-86400000);return d<=7&&d>=0}).length;
+  const nearExpiry=products.filter(p=>{if(!p.expiry)return false;const d=Math.ceil((new Date()-new Date(p.expiry))/-86400000);return d<=7&&d>=0}).length;
   const outStock=products.filter(p=>p.stock<=0).length;
   const totalSales=staff.reduce((a,s)=>a+(s.sales||0),0);
   const mg=document.getElementById('dash-metrics');
   if(mg){
     mg.innerHTML=`
-      <div class="metric success"><div class="metric-label">Today's Sales</div><div class="metric-value">${fmt(totalSales||145000)}</div><div class="metric-sub">↑ 12% vs yesterday</div></div>
-      <div class="metric success"><div class="metric-label">Gross Profit</div><div class="metric-value">KSh 38K</div><div class="metric-sub">Margin 26.2%</div></div>
+      <div class="metric success"><div class="metric-label">Today's Sales</div><div class="metric-value">${fmt(totalSales)}</div><div class="metric-sub">—</div></div>
+      <div class="metric success"><div class="metric-label">Gross Profit</div><div class="metric-value">${fmt(0)}</div><div class="metric-sub">—</div></div>
       <div class="metric warn"><div class="metric-label">Low Stock</div><div class="metric-value">${lowStock}</div><div class="metric-sub">Need reorder</div></div>
       <div class="metric danger"><div class="metric-label">Out of Stock</div><div class="metric-value">${outStock}</div><div class="metric-sub">Discrepancy</div></div>
-      <div class="metric"><div class="metric-label">Transactions</div><div class="metric-value">412</div><div class="metric-sub">Avg KSh 352</div></div>
+      <div class="metric"><div class="metric-label">Transactions</div><div class="metric-value">0</div><div class="metric-sub">Avg ${fmt(0)}</div></div>
       <div class="metric warn"><div class="metric-label">Near Expiry</div><div class="metric-value">${nearExpiry}</div><div class="metric-sub">Within 5 days</div></div>`;
+  }
+  const alertsList=document.getElementById('dash-alerts-list');
+  if(alertsList){
+    alertsList.innerHTML='<div class="alert-item info"><i class="ti ti-info-circle"></i><span>No active alerts.</span></div>';
   }
   const tb=document.getElementById('dash-staff-body');
   if(tb){
@@ -1030,7 +982,7 @@ function renderDashboard(){
 function renderStock(){
   const lowStock=products.filter(p=>p.stock<p.min).length;
   const outStock=products.filter(p=>p.stock<=0).length;
-  const nearExpiry=products.filter(p=>{const d=Math.ceil((new Date('2026-07-18')-new Date(p.expiry))/-86400000);return d<=7&&d>=0}).length;
+  const nearExpiry=products.filter(p=>{if(!p.expiry)return false;const d=Math.ceil((new Date()-new Date(p.expiry))/-86400000);return d<=7&&d>=0}).length;
   const sm=document.getElementById('stock-metrics');
   if(sm){
     sm.innerHTML=`
@@ -1038,7 +990,7 @@ function renderStock(){
       <div class="metric warn"><div class="metric-label">Low Stock</div><div class="metric-value">${lowStock}</div></div>
       <div class="metric danger"><div class="metric-label">Out of Stock</div><div class="metric-value">${outStock}</div></div>
       <div class="metric warn"><div class="metric-label">Near Expiry</div><div class="metric-value">${nearExpiry}</div></div>
-      <div class="metric danger"><div class="metric-label">Discrepancies</div><div class="metric-value">5</div></div>`;
+      <div class="metric danger"><div class="metric-label">Discrepancies</div><div class="metric-value">0</div></div>`;
   }
   const body=document.getElementById('stock-body');
   if(body){
@@ -1135,7 +1087,7 @@ function renderEmployees(){
         cells+=`<div class="${on?'shift-on':'shift-off'}"></div>`;
       }
       return `<div class="shift-grid" style="margin-bottom:2px"><div class="shift-name">${s.name.split(' ').map((w,i)=>i===0?w:w[0]+'.').join(' ')}</div>${cells}</div>`;
-    }).join('');
+    }).join('')||'<div style="color:var(--tg-text2);font-size:12px">No staff yet.</div>';
   }
   const accBody=document.getElementById('staff-account-body');
   if(accBody){
