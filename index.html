@@ -420,7 +420,7 @@ tr:hover td{background:var(--tg-surface2)}
       <!-- CARPETS (ADMIN ONLY) -->
       <div class="page" id="page-carpets">
         <div class="page-title">
-          <div class="ptl"><i class="ti ti-carpet"></i> Carpet Inventory <span class="tag tag-gray" style="font-size:10px">Owner only</span></div>
+          <div class="ptl"><i class="ti ti-carpet"></i> Carpet Inventory</div>
           <button class="btn-sm primary" id="add-carpet-btn" onclick="openCarpetModal()"><i class="ti ti-plus"></i> Add Carpet</button>
         </div>
         <div class="metric-grid" id="carpet-metrics"></div>
@@ -602,7 +602,7 @@ tr:hover td{background:var(--tg-surface2)}
 <div class="overlay" id="carpet-overlay">
   <div class="modal-card">
     <h2 id="carpet-modal-title"><i class="ti ti-carpet" style="vertical-align:-2px;margin-right:6px"></i>Add Carpet</h2>
-    <p>Owner-only inventory. Not visible to managers, cashiers, storekeepers, or accountants.</p>
+    <p>Visible to Owner and Cashier accounts. Adding, editing, and deleting carpets is restricted to the Owner account.</p>
     <input type="hidden" id="c-editid"/>
     <div class="grid2">
       <div class="field"><label>Code</label><input id="c-code" placeholder="e.g. CPT-1001"/></div>
@@ -650,7 +650,7 @@ tr:hover td{background:var(--tg-surface2)}
 <script>
 /* ================= ROLE CONFIG ================= */
 const ROLES={
-  admin:{label:'Owner/Admin',user:'admin',pass:'admin10',nav:['dashboard','sales','stock','carpets','employees','reports','suppliers'],tfa:false,perms:{editPrice:true,editStock:true,deleteProduct:true,manageSupplier:true,manageStaff:true,sell:true,print:true,manageCarpets:true}}
+  admin:{label:'Owner/Admin',user:'admin',pass:'admin10',nav:['dashboard','sales','stock','carpets','employees','reports','suppliers'],tfa:false,perms:{editPrice:true,editStock:true,deleteProduct:true,manageSupplier:true,manageStaff:true,sell:true,print:true,manageCarpets:true,viewCarpets:true}}
 };
 const NAV={dashboard:{label:'Dashboard',icon:'ti-layout-dashboard'},sales:{label:'Point of Sale',icon:'ti-credit-card'},stock:{label:'Stock Control',icon:'ti-package'},carpets:{label:'Carpet Inventory',icon:'ti-carpet'},employees:{label:'Employees',icon:'ti-users'},reports:{label:'Reports & Audit',icon:'ti-file-analytics'},suppliers:{label:'Suppliers',icon:'ti-truck'}};
 const ROLE_KEY_BY_LABEL={Cashier:'cashier',Manager:'manager',Storekeeper:'storekeeper',Accountant:'accountant'};
@@ -663,9 +663,13 @@ function getAccount(username){
   const s=staff.find(x=>x.username&&x.username.toLowerCase()===username.toLowerCase());
   if(s){
     const roleKey=ROLE_KEY_BY_LABEL[s.role]||'cashier';
-    const base={nav:['dashboard','sales'],perms:{editPrice:false,editStock:false,deleteProduct:false,manageSupplier:false,manageStaff:false,sell:true,print:true,manageCarpets:false}};
-    if(roleKey==='manager'||roleKey==='storekeeper')base.nav=['dashboard','sales','stock','employees','reports','suppliers'];
-    if(roleKey==='accountant')base.nav=['dashboard','reports'];
+    const ROLE_DEFS={
+      cashier:{nav:['dashboard','sales','carpets'],perms:{editPrice:false,editStock:false,deleteProduct:false,manageSupplier:false,manageStaff:false,sell:true,print:true,manageCarpets:false,viewCarpets:true}},
+      manager:{nav:['dashboard','sales','stock','employees','reports','suppliers'],perms:{editPrice:true,editStock:true,deleteProduct:true,manageSupplier:true,manageStaff:true,sell:true,print:true,manageCarpets:false,viewCarpets:false}},
+      storekeeper:{nav:['sales','stock','suppliers'],perms:{editPrice:false,editStock:true,deleteProduct:false,manageSupplier:true,manageStaff:false,sell:true,print:true,manageCarpets:false,viewCarpets:false}},
+      accountant:{nav:['dashboard','reports'],perms:{editPrice:false,editStock:false,deleteProduct:false,manageSupplier:false,manageStaff:false,sell:false,print:true,manageCarpets:false,viewCarpets:false}}
+    };
+    const base=ROLE_DEFS[roleKey]||ROLE_DEFS.cashier;
     return {label:s.role,user:s.username,pass:s.password,nav:base.nav,tfa:false,perms:base.perms,displayName:s.name,staffId:s.id};
   }
   return null;
@@ -813,7 +817,7 @@ function bootApp(r){
   buildSidebar(r.nav);
   applyPermissionsToUI();
   renderAll();
-  showPage('dashboard');
+  showPage(r.nav[0]||'dashboard');
   logSession('in',r.label,now);
   showToast('login','Logged in as '+r.label+' at '+now,4000);
   document.getElementById('init-time').textContent=now;
@@ -893,7 +897,7 @@ function buildSidebar(pages){
   });
 }
 function showPage(id){
-  if(id==='carpets'&&!currentPerms.manageCarpets){showToast('err','Carpet inventory is restricted to the Owner account.');id='dashboard';}
+  if(id==='carpets'&&!currentPerms.viewCarpets){showToast('err','Carpet inventory is restricted.');id='dashboard';}
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const pg=document.getElementById('page-'+id); if(pg)pg.classList.add('active');
@@ -925,7 +929,7 @@ function renderAll(){
   renderEmployees();
   renderCart();
   populateSupplierSelect();
-  if(currentPerms.manageCarpets)renderCarpets();
+  if(currentPerms.viewCarpets)renderCarpets();
 }
  
 function fmt(n){return 'KSh '+Number(n).toLocaleString('en-KE',{minimumFractionDigits:0,maximumFractionDigits:2})}
@@ -1012,7 +1016,7 @@ function renderStock(){
 }
  
 function renderCarpets(){
-  if(!currentPerms.manageCarpets)return;
+  if(!currentPerms.viewCarpets)return;
   const lowStock=carpets.filter(c=>c.stock<c.min).length;
   const outStock=carpets.filter(c=>c.stock<=0).length;
   const totalValue=carpets.reduce((a,c)=>a+c.price*c.stock,0);
