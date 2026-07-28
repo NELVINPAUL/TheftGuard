@@ -210,7 +210,14 @@ tr:hover td{background:var(--tg-surface2)}
 @media print{
   body *{visibility:hidden}
   #print-area,#print-area *{visibility:visible}
-  #print-area{position:absolute;top:0;left:0;width:100%}
+  #print-area{
+    display:block !important;
+    position:absolute;top:0;left:0;width:100%;
+    background:#fff !important;color:#000 !important;
+    font-family:var(--font-mono);font-size:12px;line-height:1.7;
+    padding:20px;
+  }
+  #print-area *{color:#000 !important;background:transparent !important}
 }
 #print-area{display:none}
 </style>
@@ -357,7 +364,7 @@ tr:hover td{background:var(--tg-surface2)}
           <div class="card">
             <div class="card-title"><div class="ctl"><i class="ti ti-shopping-cart"></i> Current Sale</div></div>
             <div class="form-row">
-              <div class="field" style="flex:2"><label>Barcode / Product</label><input type="text" placeholder="Scan or type barcode, then Enter..." id="barcode-input" onkeydown="if(event.key==='Enter'){addItemByBarcode();}"/></div>
+              <div class="field" style="flex:2"><label>Barcode / Product</label><input type="text" placeholder="Scan or type barcode, then Enter..." id="barcode-input" list="dl-pos-items" onkeydown="if(event.key==='Enter'){addItemByBarcode();}"/></div>
               <button class="btn-sm primary" onclick="addItemByBarcode()"><i class="ti ti-plus"></i> Add</button>
               <button class="btn-sm" onclick="openScanModal()"><i class="ti ti-viewfinder"></i> Scan (Camera)</button>
             </div>
@@ -527,10 +534,10 @@ tr:hover td{background:var(--tg-surface2)}
     <p>Products entered here appear immediately at the POS for cashiers.</p>
     <input type="hidden" id="p-editid"/>
     <div class="grid2">
-      <div class="field"><label>Barcode</label><input id="p-barcode" placeholder="e.g. 6009900112"/></div>
-      <div class="field"><label>Category</label><input id="p-category" placeholder="e.g. Grocery"/></div>
+      <div class="field"><label>Barcode</label><input id="p-barcode" placeholder="e.g. 6009900112" list="dl-barcodes"/></div>
+      <div class="field"><label>Category</label><input id="p-category" placeholder="e.g. Grocery" list="dl-categories"/></div>
     </div>
-    <div class="field"><label>Product Name</label><input id="p-name" placeholder="e.g. Rice 2kg"/></div>
+    <div class="field"><label>Product Name</label><input id="p-name" placeholder="e.g. Rice 2kg" list="dl-product-names"/></div>
     <div class="grid2">
       <div class="field"><label>Price (KSh)</label><input id="p-price" type="number" min="0" step="0.5" placeholder="0.00"/></div>
       <div class="field"><label>Stock Quantity</label><input id="p-stock" type="number" min="0" placeholder="0"/></div>
@@ -554,9 +561,9 @@ tr:hover td{background:var(--tg-surface2)}
   <div class="modal-card">
     <h2 id="supplier-modal-title"><i class="ti ti-truck" style="vertical-align:-2px;margin-right:6px"></i>Add Supplier</h2>
     <input type="hidden" id="s-editid"/>
-    <div class="field"><label>Supplier Name</label><input id="s-name" placeholder="e.g. Kitui Millers Ltd"/></div>
+    <div class="field"><label>Supplier Name</label><input id="s-name" placeholder="e.g. Kitui Millers Ltd" list="dl-supplier-names"/></div>
     <div class="field"><label>Contact</label><input id="s-contact" placeholder="e.g. 0722 111 222"/></div>
-    <div class="field"><label>Products Supplied</label><input id="s-products" placeholder="e.g. Flour, Maize"/></div>
+    <div class="field"><label>Products Supplied</label><input id="s-products" placeholder="e.g. Flour, Maize" list="dl-categories"/></div>
     <div class="err-msg" id="supplier-err" style="text-align:left;min-height:14px"></div>
     <div class="modal-actions">
       <button class="btn-sm primary" onclick="saveSupplier()"><i class="ti ti-check"></i> Save Supplier</button>
@@ -571,7 +578,7 @@ tr:hover td{background:var(--tg-surface2)}
   <div class="modal-card">
     <h2 id="staff-modal-title"><i class="ti ti-user-plus" style="vertical-align:-2px;margin-right:6px"></i>Add Staff</h2>
     <input type="hidden" id="st-editid"/>
-    <div class="field"><label>Full Name</label><input id="st-name" placeholder="e.g. Grace Achieng"/></div>
+    <div class="field"><label>Full Name</label><input id="st-name" placeholder="e.g. Grace Achieng" list="dl-staff-names"/></div>
     <div class="field"><label>Role</label>
       <select id="st-role"><option value="Cashier">Cashier</option><option value="Manager">Manager</option><option value="Storekeeper">Storekeeper</option><option value="Accountant">Accountant</option></select>
     </div>
@@ -606,11 +613,11 @@ tr:hover td{background:var(--tg-surface2)}
     <input type="hidden" id="c-editid"/>
     <div class="grid2">
       <div class="field"><label>Code</label><input id="c-code" placeholder="e.g. CPT-1001"/></div>
-      <div class="field"><label>Size</label><input id="c-size" placeholder="e.g. 5x8 ft"/></div>
+      <div class="field"><label>Size</label><input id="c-size" placeholder="e.g. 5x8 ft" list="dl-carpet-sizes"/></div>
     </div>
-    <div class="field"><label>Design / Name</label><input id="c-name" placeholder="e.g. Persian Medallion"/></div>
+    <div class="field"><label>Design / Name</label><input id="c-name" placeholder="e.g. Persian Medallion" list="dl-carpet-names"/></div>
     <div class="grid2">
-      <div class="field"><label>Color</label><input id="c-color" placeholder="e.g. Maroon"/></div>
+      <div class="field"><label>Color</label><input id="c-color" placeholder="e.g. Maroon" list="dl-carpet-colors"/></div>
       <div class="field"><label>Price (KSh)</label><input id="c-price" type="number" min="0" step="1" placeholder="0.00"/></div>
     </div>
     <div class="grid2">
@@ -637,12 +644,23 @@ tr:hover td{background:var(--tg-surface2)}
       <div class="scan-line" id="scan-line" style="display:none"></div>
     </div>
     <div class="scan-hint" id="scan-status">Starting camera…</div>
-    <div class="field" style="margin-top:.8rem"><label>Or type barcode manually</label><input id="scan-manual" placeholder="Type barcode & press Enter" onkeydown="if(event.key==='Enter'){manualScanSubmit();}"/></div>
+    <div class="field" style="margin-top:.8rem"><label>Or type barcode manually</label><input id="scan-manual" placeholder="Type barcode & press Enter" list="dl-barcodes" onkeydown="if(event.key==='Enter'){manualScanSubmit();}"/></div>
     <div class="modal-actions">
       <button class="btn-sm" onclick="closeScanModal()">Close</button>
     </div>
   </div>
 </div>
+ 
+<!-- AUTOCOMPLETE DATALISTS (populated live from the database via refreshDatalists()) -->
+<datalist id="dl-barcodes"></datalist>
+<datalist id="dl-product-names"></datalist>
+<datalist id="dl-categories"></datalist>
+<datalist id="dl-carpet-names"></datalist>
+<datalist id="dl-carpet-colors"></datalist>
+<datalist id="dl-carpet-sizes"></datalist>
+<datalist id="dl-supplier-names"></datalist>
+<datalist id="dl-staff-names"></datalist>
+<datalist id="dl-pos-items"></datalist>
  
 <!-- PRINT AREA (used by window.print) -->
 <div id="print-area"></div>
@@ -681,13 +699,29 @@ let printerOn=false;
 let scanStream=null,scanRAF=null,barcodeDetector=null;
  
 /* ================= DATA STATE ================= */
-let suppliers=[];
+let suppliers=[
+  {id:'sup1',name:'Kitui Millers Ltd',contact:'0722 111 222',products:'Flour, Maize',lastDelivery:'2026-07-20',pendingPO:0,status:'Active'},
+  {id:'sup2',name:'Nairobi Fresh Distributors',contact:'0733 444 555',products:'Vegetables, Fruit',lastDelivery:'2026-07-24',pendingPO:12500,status:'Active'},
+  {id:'sup3',name:'Coast Carpet Traders',contact:'0700 888 999',products:'Carpets, Rugs',lastDelivery:'2026-07-15',pendingPO:0,status:'Active'}
+];
  
-let products=[];
+let products=[
+  {barcode:'6009900112',name:'Rice 2kg',category:'Grocery',price:280,stock:45,min:10,expiry:'2026-12-01',supplierId:'sup1'},
+  {barcode:'6009900219',name:'Cooking Oil 1L',category:'Grocery',price:320,stock:6,min:15,expiry:'2026-09-10',supplierId:'sup1'},
+  {barcode:'6009900334',name:'Milk 500ml',category:'Dairy',price:65,stock:30,min:20,expiry:'2026-08-02',supplierId:'sup2'}
+];
  
-let carpets=[];
+let carpets=[
+  {code:'CPT-1001',name:'Persian Medallion',size:'5x8 ft',color:'Maroon',price:8500,stock:4,min:2,supplierId:'sup3'},
+  {code:'CPT-1002',name:'Modern Geometric',size:'6x9 ft',color:'Grey',price:9500,stock:1,min:2,supplierId:'sup3'}
+];
  
-let staff=[];
+let staff=[
+  {id:'st1',name:'Grace Achieng',role:'Manager',onShift:true,username:'grace.manager',password:'manager123',clockIn:'08:00:00',location:'In zone',sales:0,status:'Active'},
+  {id:'st2',name:'John Mwangi',role:'Cashier',onShift:true,username:'john.cashier',password:'cashier123',clockIn:'08:00:00',location:'In zone',sales:0,status:'Active'},
+  {id:'st3',name:'Amina Hassan',role:'Storekeeper',onShift:false,username:'amina.store',password:'store123',clockIn:'—',location:'—',sales:0,status:'Off shift'},
+  {id:'st4',name:'Peter Otieno',role:'Accountant',onShift:false,username:'peter.accounts',password:'accounts123',clockIn:'—',location:'—',sales:0,status:'Off shift'}
+];
  
 let cart=[]; // {barcode,name,price,qty}
 let lastSaleSnapshot=null;
@@ -930,6 +964,7 @@ function renderAll(){
   renderCart();
   populateSupplierSelect();
   if(currentPerms.viewCarpets)renderCarpets();
+  refreshDatalists();
 }
  
 function fmt(n){return 'KSh '+Number(n).toLocaleString('en-KE',{minimumFractionDigits:0,maximumFractionDigits:2})}
@@ -1013,6 +1048,7 @@ function renderStock(){
       </tr>`;
     }).join('')||'<tr><td colspan="9" style="color:var(--tg-text2)">No products yet. Click "Add Product" to get started.</td></tr>';
   }
+  refreshDatalists();
 }
  
 function renderCarpets(){
@@ -1045,6 +1081,7 @@ function renderCarpets(){
       </tr>`;
     }).join('')||'<tr><td colspan="10" style="color:var(--tg-text2)">No carpets yet. Click "Add Carpet" to get started.</td></tr>';
   }
+  refreshDatalists();
 }
  
 function renderSuppliers(){
@@ -1068,6 +1105,7 @@ function renderSuppliers(){
     rl.innerHTML=html;
   }
   populateSupplierSelect();
+  refreshDatalists();
 }
  
 function populateSupplierSelect(){
@@ -1075,6 +1113,34 @@ function populateSupplierSelect(){
   if(sel)sel.innerHTML=suppliers.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
   const csel=document.getElementById('c-supplier');
   if(csel)csel.innerHTML=suppliers.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+}
+ 
+/* ================= AUTOCOMPLETE (DATALISTS) ================= */
+/* Rebuilds every <datalist> from whatever is currently in the database arrays,
+   so suggestions are always in sync with real data — never stale or made up. */
+function refreshDatalists(){
+  const esc=(v)=>String(v==null?'':v).replace(/"/g,'&quot;');
+  const uniq=(arr)=>[...new Set(arr.filter(v=>v!==undefined&&v!==null&&v!==''))];
+ 
+  const setDL=(id,values)=>{
+    const dl=document.getElementById(id);
+    if(dl)dl.innerHTML=uniq(values).map(v=>`<option value="${esc(v)}">`).join('');
+  };
+ 
+  setDL('dl-barcodes',products.map(p=>p.barcode));
+  setDL('dl-product-names',products.map(p=>p.name));
+  setDL('dl-categories',[...products.map(p=>p.category),...carpets.length?[]:[]]);
+  setDL('dl-carpet-names',carpets.map(c=>c.name));
+  setDL('dl-carpet-colors',carpets.map(c=>c.color));
+  setDL('dl-carpet-sizes',carpets.map(c=>c.size));
+  setDL('dl-supplier-names',suppliers.map(s=>s.name));
+  setDL('dl-staff-names',staff.map(s=>s.name));
+ 
+  const posDL=document.getElementById('dl-pos-items');
+  if(posDL){
+    posDL.innerHTML=products.map(p=>`<option value="${esc(p.barcode)}">${esc(p.name)}</option>`)
+      .concat(products.map(p=>`<option value="${esc(p.name)}">`)).join('');
+  }
 }
  
 function renderEmployees(){
@@ -1103,6 +1169,7 @@ function renderEmployees(){
       return `<tr><td>${s.name}</td><td><span class="tag tag-info">${s.role}</span></td><td>${loginCell}</td><td>${shiftTag}</td><td><div class="row-actions">${editBtn}${resetBtn}</div></td></tr>`;
     }).join('')||'<tr><td colspan="5" style="color:var(--tg-text2)">No staff yet.</td></tr>';
   }
+  refreshDatalists();
 }
  
 /* ================= PRODUCT CRUD ================= */
@@ -1541,7 +1608,7 @@ function printReceipt(){
   if(!currentPerms.print){showToast('err','Your role cannot print receipts.');return;}
   if(!lastSaleSnapshot){showToast('err','No receipt to print yet.');return;}
   if(!printerOn){showToast('err','Printer is offline — click the printer badge to connect it.',3500);}
-  document.getElementById('print-area').innerHTML=document.getElementById('receipt-html').innerHTML;
+  document.getElementById('print-area').innerHTML='<div style="text-align:center;font-size:14px;font-weight:bold;margin-bottom:8px">TheftGuardPOS Receipt</div>'+document.getElementById('receipt-html').innerHTML;
   window.print();
 }
 function generatePO(){
@@ -1626,6 +1693,7 @@ startClock();
 document.body.className='theme-default';
 populateSupplierSelect();
 renderCart();
+refreshDatalists();
 </script>
 </body>
 </html>
