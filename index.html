@@ -368,6 +368,9 @@ tr:hover td{background:var(--tg-surface2)}
               <button class="btn-sm primary" onclick="addItemByBarcode()"><i class="ti ti-plus"></i> Add</button>
               <button class="btn-sm" onclick="openScanModal()"><i class="ti ti-viewfinder"></i> Scan (Camera)</button>
             </div>
+            <div class="form-row">
+              <div class="field" style="flex:1"><label>Or pick from stock</label><select id="pos-stock-select" onchange="selectFromStockDropdown()"><option value="">-- Select an item in stock --</option></select></div>
+            </div>
             <table id="sale-table">
               <thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th><th></th></tr></thead>
               <tbody id="sale-body"></tbody>
@@ -1141,6 +1144,23 @@ function refreshDatalists(){
     posDL.innerHTML=products.map(p=>`<option value="${esc(p.barcode)}">${esc(p.name)}</option>`)
       .concat(products.map(p=>`<option value="${esc(p.name)}">`)).join('');
   }
+ 
+  const stockSel=document.getElementById('pos-stock-select');
+  if(stockSel){
+    const inStock=products.filter(p=>p.stock>0);
+    stockSel.innerHTML='<option value="">-- Select an item in stock --</option>'+
+      inStock.map(p=>`<option value="${esc(p.barcode)}">${esc(p.name)} — ${p.stock} in stock (${fmt(p.price)})</option>`).join('');
+    if(!inStock.length)stockSel.innerHTML='<option value="">-- No items currently in stock --</option>';
+  }
+}
+ 
+function selectFromStockDropdown(){
+  const sel=document.getElementById('pos-stock-select');
+  const barcode=sel.value;
+  if(!barcode)return;
+  document.getElementById('barcode-input').value=barcode;
+  addItemByBarcode();
+  sel.value='';
 }
  
 function renderEmployees(){
